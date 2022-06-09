@@ -17,7 +17,7 @@ app.use(cors());
 connectDB();
 
 //get the app to use routers
-app.use("/farah/parents", parentRouter);
+app.use("/farah", parentRouter);
 
 const PORT = process.env.PORT || process.env.port;
 app.listen(PORT, (err) =>

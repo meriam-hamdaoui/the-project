@@ -1,22 +1,55 @@
 const { Schema, model } = require("mongoose");
 
+const childSchema = new Schema({
+  parent: {
+    type: Schema.Types.ObjectId,
+    ref: "parent",
+  },
+  firstName: {
+    type: String,
+    required: [true, "this field can't be empty"],
+  },
+  lastName: {
+    type: String,
+    required: [true, "this field can't be empty"],
+  },
+  birthDate: {
+    type: Date,
+  },
+  disorder: {
+    disType: {
+      type: String,
+      required: [true, "this field can't be empty"],
+    },
+    disEstablishment: {
+      type: String,
+      required: [true, "this field can't be empty"],
+    },
+    disDate: {
+      type: Date,
+    },
+  },
+  integration: {
+    integrated: {
+      type: Boolean,
+      required: [true, "this field can't be empty"],
+    },
+    integEstablishment: {
+      type: String,
+      required: [true, "this field can't be empty"],
+    },
+  },
+});
+
 const parentSchema = new Schema({
   role: {
     type: Number,
   },
-  fullName: {
-    firstName: {
-      type: String,
-      required: [true, "this field can't be empty"],
-    },
-    lastName: {
-      type: String,
-      required: [true, "this field can't be empty"],
-    },
+  firstName: {
+    type: String,
   },
-  birthDate: {
-    type: Date,
-    required: [true, "this field can't be empty"],
+  lastName: {
+    type: String,
   },
   email: {
     type: String,
@@ -29,42 +62,34 @@ const parentSchema = new Schema({
   },
   phone: {
     type: Number,
-    required: [true, "this field can't be empty"],
   },
   address: {
     street: {
       type: String,
-      required: [true, "this field can't be empty"],
     },
     city: {
       type: String,
-      required: [true, "this field can't be empty"],
     },
     state: {
       type: String,
-      required: [true, "this field can't be empty"],
     },
     postal: {
       type: Number,
-      required: [true, "this field can't be empty"],
     },
   },
   job: {
     type: String,
-    required: [true, "this field can't be empty"],
   },
   familyMembers: {
     type: Number,
-    required: [true, "this field can't be empty"],
   },
-  child: {
-    type: childSchema,
-    required: [true, "this field can't be empty"],
-  },
+  child: [childSchema],
   demandes: {
     type: String,
-    required: [true, "this field can't be empty"],
   },
 });
 
-module.exports = Parent = model("parent", parentSchema);
+const Parent = model("parent", parentSchema);
+const Child = model("child", childSchema);
+
+module.exports = { Parent, Child };
