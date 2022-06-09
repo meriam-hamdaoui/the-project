@@ -7,11 +7,9 @@ const childSchema = new Schema({
   },
   firstName: {
     type: String,
-    required: [true, "this field can't be empty"],
   },
   lastName: {
     type: String,
-    required: [true, "this field can't be empty"],
   },
   birthDate: {
     type: Date,
@@ -19,11 +17,9 @@ const childSchema = new Schema({
   disorder: {
     disType: {
       type: String,
-      required: [true, "this field can't be empty"],
     },
     disEstablishment: {
       type: String,
-      required: [true, "this field can't be empty"],
     },
     disDate: {
       type: Date,
@@ -32,11 +28,9 @@ const childSchema = new Schema({
   integration: {
     integrated: {
       type: Boolean,
-      required: [true, "this field can't be empty"],
     },
     integEstablishment: {
       type: String,
-      required: [true, "this field can't be empty"],
     },
   },
 });
