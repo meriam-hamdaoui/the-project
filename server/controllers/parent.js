@@ -19,10 +19,10 @@ exports.signup = async (req, res) => {
         children.pop();
       }
     });
-
     //children and parent are added simultaneously
-    children.length !== 0 &&
-      (await (newParent.save() && Child.insertMany(children)));
+    (await newParent.save()) &&
+      children.length !== 0 &&
+      (await Child.insertMany(children));
     return res.status(200).send("registration successeded");
   } catch (error) {
     console.error(`signup error => ${error}`);

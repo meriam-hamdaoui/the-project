@@ -3,22 +3,28 @@ const { Schema, model, Mongoose } = require("mongoose");
 const childSchema = new Schema({
   childFName: {
     type: String,
+    required: [true, "enter your child first name"],
   },
   childLName: {
     type: String,
+    required: [true, "enter your child last name"],
   },
   birthDate: {
     type: Date,
+    required: [true, "enter your child birth date"],
   },
   disorder: {
     disType: {
       type: String,
+      required: [true, "please select the disorder type of your child"],
     },
     disEstablishment: {
       type: String,
+      required: [true, "enter the establishment diagnositic"],
     },
     disDate: {
       type: Date,
+      required: [true, "select the diagnostic Date"],
     },
   },
   integration: {
@@ -32,6 +38,10 @@ const childSchema = new Schema({
         return this.integrated === true;
       },
     },
+  },
+  inscritDate: {
+    type: Date,
+    default: Date.now(),
   },
 });
 
@@ -96,6 +106,10 @@ const parentSchema = new Schema({
   demandes: {
     type: String,
     required: [true, "insert your demandes please"],
+  },
+  registerDate: {
+    type: Date,
+    default: Date.now(),
   },
 });
 
