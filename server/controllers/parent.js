@@ -11,17 +11,16 @@ exports.signup = async (req, res) => {
     // }
     //doesn't exist
     const newParent = await new Parent(req.body);
-    let newChild = {};
-    await newParent.child.forEach((element) => {
-      newChild = new Child(element);
-      newChild.save();
-    });
+    //this method didn't work, the child register even when parent didn't
+    if (newParent.save()) {
+      let newChild = {};
+      await newParent.child.forEach((element) => {
+        newChild = new Child(element);
+        newChild.save();
+      });
+    }
 
-    await newParent.save();
-
-    res
-      .status(200)
-      .send({ msg: "new added successefuly", newParent, newChild });
+    res.status(200).send({ msg: "new added successefuly", newParent });
   } catch (error) {
     console.error(`signup error => ${error}`);
     res.status(500).send({ msg: "signup error", error });

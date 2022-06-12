@@ -1,10 +1,6 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, Mongoose } = require("mongoose");
 
 const childSchema = new Schema({
-  parent: {
-    type: Schema.Types.ObjectId,
-    ref: "parent",
-  },
   firstName: {
     type: String,
   },
@@ -25,30 +21,35 @@ const childSchema = new Schema({
       type: Date,
     },
   },
-  integration: {
-    integrated: {
-      type: Boolean,
-    },
-    integEstablishment: {
-      type: String,
-    },
+  integrated: {
+    type: Boolean,
+    required: [true, "choose a field"],
+  },
+  integEstablishment: {
+    type: String,
+    //this function didn't work the registration pass even when it's true
+    required: () => (this.integrated ? true : false),
   },
 });
 
 const parentSchema = new Schema({
   role: {
     type: Number,
+    default: 2,
   },
   firstName: {
     type: String,
+    required: [true, "enter your first name"],
   },
   lastName: {
     type: String,
+    required: [true, "enter your last name"],
   },
   email: {
     type: String,
     required: [true, "this field can't be empty"],
     unique: true,
+    lowercase: true,
   },
   password: {
     type: String,
@@ -56,30 +57,39 @@ const parentSchema = new Schema({
   },
   phone: {
     type: Number,
+    min: [8, "enter a valid phone number please"],
+    required: [true, "enter your phone number please"],
   },
   address: {
     street: {
       type: String,
+      required: [true, "this field is required"],
     },
     city: {
       type: String,
+      required: [true, "this field is required"],
     },
     state: {
       type: String,
+      required: [true, "this field is required"],
     },
     postal: {
       type: Number,
+      required: [true, "this field is required"],
     },
   },
   job: {
     type: String,
+    required: [true, "insert your job please"],
   },
   familyMembers: {
     type: Number,
+    required: [true, "insert your information please"],
   },
   child: [childSchema],
   demandes: {
     type: String,
+    required: [true, "insert your demandes please"],
   },
 });
 
