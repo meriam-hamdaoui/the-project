@@ -1,10 +1,10 @@
 const { Schema, model, Mongoose } = require("mongoose");
 
 const childSchema = new Schema({
-  firstName: {
+  childFName: {
     type: String,
   },
-  lastName: {
+  childLName: {
     type: String,
   },
   birthDate: {
@@ -21,14 +21,17 @@ const childSchema = new Schema({
       type: Date,
     },
   },
-  integrated: {
-    type: Boolean,
-    required: [true, "choose a field"],
-  },
-  integEstablishment: {
-    type: String,
-    //this function didn't work the registration pass even when it's true
-    required: () => (this.integrated ? true : false),
+  integration: {
+    integrated: {
+      type: Boolean,
+      required: [true, "choose a field"],
+    },
+    integEstablishment: {
+      type: String,
+      required: () => {
+        return this.integrated === true;
+      },
+    },
   },
 });
 
@@ -86,7 +89,10 @@ const parentSchema = new Schema({
     type: Number,
     required: [true, "insert your information please"],
   },
-  child: [childSchema],
+  child: {
+    type: [childSchema],
+    required: [true, "you can't subscribe without children"],
+  },
   demandes: {
     type: String,
     required: [true, "insert your demandes please"],
