@@ -50,27 +50,6 @@ exports.signup = async (req, res) => {
         token,
       });
     }
-
-    // if (newParent && !duplacted) {
-    //     await newParent.save();
-
-    // }
-
-    // if (duplacted) {
-    //   children.length === 0;
-
-    // }
-    // const removeParent = false;
-    // if (!children.length) {
-    //   let { id } = newParent._id;
-    //   removeParent = await Parent.findByIdAndRemove({ id });
-    // }
-
-    // if (children.length && !removeParent) {
-    //   if (await newParent.save()) {
-    //     await Child.create(children);
-    //   }
-    // }
   } catch (error) {
     console.error(`signup error => ${error}`);
     return res.status(500).send({ msg: "signup error", error });
