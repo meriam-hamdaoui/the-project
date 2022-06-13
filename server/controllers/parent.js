@@ -1,58 +1,56 @@
+//require the parent/child schema for registration
 const { Parent, Child } = require("../models/parent");
 
+/** registration conroller */
 exports.signup = async (req, res) => {
-  let { email, password } = req.body;
+  //distracturing
+  const { email, password } = req.body;
   try {
-    //search if our user already exists
-    const parentExist = await Parent.findOne({ email });
-    //parent exist
-    if (parentExist) {
-      return res.status(400).send("this email already exists");
-    }
-    //parent doesn't exist
+    /*******verify if the email already exists******/
+    const emailExists = await Parent.findOne({ email });
+    //1.email exists
+    if (emailExists) return res.status(400).send("this email already exists");
+    //2.email doesn't exist
     const newParent = await new Parent(req.body);
-    //avoid duplacted child for the same parent
-    const childTab = newParent.child.map((el) => el.childFName);
-    let childExist = childTab.some(
-      (name, index) => childTab.indexOf(name) !== index
-    );
-    if (childExist) {
-      childTab.length === 0;
-      return res.status(400).send("this child already registred");
-    }
-    //this didn't work
-    let newChild;
-    if (childTab.length !== 0) {
-      newChild = await new Child(childTab);
-      await newParent.save(async (err) => {
-        err ? handleError(err) : await newChild.save();
-      });
-      return res.status(200).send("parent and child registred");
+    console.log("newParent => " + newParent);
+
+    const children = newParent.child;
+    console.log("children => " + children);
+    /**before move to registration we should verify duplicated children */
+    const duplicatedChild = children.map((el) => el.childFName);
+    const duplacted = await duplicatedChild.some(
+      (name, index) => duplicatedChild.indexOf(name) !== index
+    ); //true or false
+
+    if (duplacted) return res.status(400).send("duplacted child");
+
+    if (newParent && !duplacted) {
+      (await newParent.save()) && Child.insertMany(children);
+      return res.status(200).send("welcome");
     }
 
-    // const childTab = newParent.child;
-    // let children = [];
-    // await childTab.forEach((child) => {
-    //   const { error, childFName } = child;
-    //   //all children should be added without errors
-    //   if (!error) {
-    //     //verify if the child is already has inscription
-    //     if (childTab.has(childFName)) {
-    //       return res.status(400).send("you have already add this child");
-    //     } else {
-    //       children.push(child);
-    //     }
-    //   } else {
-    //     children.pop();
+    // if (newParent && !duplacted) {
+    //     await newParent.save();
+
+    // }
+
+    // if (duplacted) {
+    //   children.length === 0;
+
+    // }
+    // const removeParent = false;
+    // if (!children.length) {
+    //   let { id } = newParent._id;
+    //   removeParent = await Parent.findByIdAndRemove({ id });
+    // }
+
+    // if (children.length && !removeParent) {
+    //   if (await newParent.save()) {
+    //     await Child.create(children);
     //   }
-    // });
+    // }
   } catch (error) {
     console.error(`signup error => ${error}`);
     return res.status(500).send({ msg: "signup error", error });
   }
 };
-
-// exports.getChildren = async (req, res) => {
-//   try {
-//   } catch (error) {}
-// };
